@@ -19,6 +19,8 @@ import Foundation
 
 class GitFormatDecoder {
 
+    var nonJSONDecoders: [GitNonJsonDecoder] = []
+
     // MARK: - Public
     /// Converts an output provided by git command line (with outputWriter formatter) to an array of objects
     func decode<T: Decodable>(_ formatOutput: String) -> [T] {
@@ -46,6 +48,20 @@ class GitFormatDecoder {
             decoder.dateDecodingStrategy = .iso8601
             
             guard let object = try? decoder.decode(T.self, from: data) else {
+
+                for nonJSONDecoder: GitNonJsonDecoder in nonJSONDecoders {
+                    if let (objectsToAdd, substringsToParse) = nonJSONDecoder.tryParse(encodedText: escapedRecord, lastDecodedObject: objects.last) {
+                        objects.append(contentsOf: objectsToAdd as? [T] ?? [])
+                        substringsToParse.forEach { substring in
+                            if let data = substring.data(using: .utf8),
+                               let object = try? decoder.decode(T.self, from: data) {
+                                objects.append(object)
+                            }
+                        }
+                        break
+                    }
+                }
+
                 continue
             }
             

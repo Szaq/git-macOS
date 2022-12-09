@@ -43,4 +43,7 @@ public class GitLogRecord: RepositoryLogRecord, Codable {
     
     /// Reference names
     private(set) public var refNames: String
+
+    //File change statistics
+    public var stats: GitLogRecordStats?
 }

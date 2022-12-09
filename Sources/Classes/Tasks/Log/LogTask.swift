@@ -56,6 +56,7 @@ class LogTask: RepositoryTask, TaskRequirable {
     func finish(terminationStatus: Int32) throws {
         if terminationStatus == 0, let output = output {
             let decoder = GitFormatDecoder()
+            decoder.nonJSONDecoders = [StatsGitNonJsonDecoder()]
             let objects: [GitLogRecord] = decoder.decode(output)
             
             records = GitLogRecordList(objects)

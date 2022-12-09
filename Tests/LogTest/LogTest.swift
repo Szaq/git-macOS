@@ -122,4 +122,28 @@ class LogTest: XCTestCase, RepositoryTest {
         // ensure there are proper number of records
         XCTAssert(log4.records.count == 0)
     }
+
+    func testFetchingLogWithStats() {
+        guard let repository = createRepository() else {
+            XCTFail("Unable to initialize repository for tests")
+            return
+        }
+        let options = GitLogOptions.default
+        options.includeStats = true
+        guard let log = try? repository.listLogRecords(options: options) else {
+            XCTFail("Unable to load records from repository")
+            return
+        }
+
+        // ensure there are proper number of records
+        XCTAssert(log.records.count == 2)
+
+        XCTAssertEqual(log.records[0].stats?.filesChanged,1)
+        XCTAssertEqual(log.records[0].stats?.insertions, 1)
+        XCTAssertEqual(log.records[0].stats?.deletions, nil)
+
+        XCTAssertEqual(log.records[1].stats?.filesChanged,1)
+        XCTAssertEqual(log.records[1].stats?.insertions, 1)
+        XCTAssertEqual(log.records[1].stats?.deletions, nil)
+    }
 }

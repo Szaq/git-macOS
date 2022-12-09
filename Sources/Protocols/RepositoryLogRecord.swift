@@ -43,4 +43,7 @@ public protocol RepositoryLogRecord {
     
     /// Reference names
     var refNames: String { get }
+
+    //File change statistics
+    var stats: GitLogRecordStats? { get }
 }

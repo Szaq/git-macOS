@@ -44,6 +44,8 @@ public class GitLogOptions: ArgumentConvertible {
     ///
     /// When specified it is equivalent to the following command: git log `<remote_name>/<reference_name>`
     public var reference: Reference?
+
+    public var includeStats: Bool = false
     
     internal struct ReferenceComparator: ArgumentConvertible {
         var lhsReferenceName: String
@@ -73,6 +75,10 @@ public class GitLogOptions: ArgumentConvertible {
         
         if let author = author {
             arguments.append("--author=\"\(author)\"")
+        }
+
+        if includeStats {
+            arguments.append("--shortstat")
         }
         
         if let reference = reference {

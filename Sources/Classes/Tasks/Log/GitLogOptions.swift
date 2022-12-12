@@ -45,7 +45,10 @@ public class GitLogOptions: ArgumentConvertible {
     /// When specified it is equivalent to the following command: git log `<remote_name>/<reference_name>`
     public var reference: Reference?
 
+    /// Add line changes statistics to log (--shortstats)
     public var includeStats: Bool = false
+
+    /// Do not show merges in log
     public var noMerges: Bool = false
     
     internal struct ReferenceComparator: ArgumentConvertible {

@@ -46,6 +46,7 @@ public class GitLogOptions: ArgumentConvertible {
     public var reference: Reference?
 
     public var includeStats: Bool = false
+    public var noMerges: Bool = false
     
     internal struct ReferenceComparator: ArgumentConvertible {
         var lhsReferenceName: String
@@ -79,6 +80,10 @@ public class GitLogOptions: ArgumentConvertible {
 
         if includeStats {
             arguments.append("--shortstat")
+        }
+
+        if noMerges {
+            arguments.append("--no-merges")
         }
         
         if let reference = reference {
